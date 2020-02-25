@@ -22,36 +22,32 @@ pip install waitress
 start transformers pipeline app with
 
 ```bash
+cd BERT-for-Unity/
 python3 app.py
 ```
 
 ## Unity
 
-### Supported pipeline objects
+### Supported pipeline objects 
 
-```bash
-next-sentence
-fill-mask
-question-answering
-sentiment-analysis
-feature-extraction
-```
+
+1. next-sentence - Provide the next N sentences for the input sequence, it will consider the return as the new input during iteration.
+2. fill-mask - Takes an input sequence containing a masked token (e.g. <mask>) and return list of most probable filled sequences, with their probabilities.
+3. question-answering - Provided some context and a question refering to the context, it will extract the answer to the question in the context.
+4. sentiment-analysis - Gives the polarity (positive / negative) of the whole input sequence.
+5. feature-extraction - Generates a tensor representation for the input sequence
+
 
 ```c#
-// Generates a tensor representation for the input sequence
-StartCoroutine(transformers.task("feature_extraction","i love you",flask_url,feature_extraction_queue));
-
-// Gives the polarity (positive / negative) of the whole input sequence.
-StartCoroutine(transformers.task("sentiment_analysis","i love you",flask_url,sentiment_analysis_queue));
-
-// Provided some context and a question refering to the context, it will extract the answer to the question in the context.
-StartCoroutine(transformers.task("question_answering","Who was Jim Henson?#Jim Henson was a nice puppet",flask_url,q_a_queue));
-
-// Provide the next N sentences for the input sequence, it will consider the return as the new input during iteration.
 StartCoroutine(transformers.task("next_sentence","I never thought it would be this hard to create #3",flask_url,next_sentence_queue));
 
-//Takes an input sequence containing a masked token (e.g. <mask>) and return list of most probable filled sequences, with their probabilities.
 StartCoroutine(transformers.task("fill_mask","I never thought it would be this <mask> to build a house",flask_url,next_sentence_queue));
+
+StartCoroutine(transformers.task("question_answering","Who was Jim Henson?#Jim Henson was a nice puppet",flask_url,q_a_queue));
+
+StartCoroutine(transformers.task("sentiment_analysis","i love you",flask_url,sentiment_analysis_queue));
+
+StartCoroutine(transformers.task("feature_extraction","i love you",flask_url,feature_extraction_queue));
 ```
 
 for more details see `unity/Assets/Simple_BERT_Usage.cs`. Open `unity/Assets/bert_example_scene.unity` to use the example scene. 
