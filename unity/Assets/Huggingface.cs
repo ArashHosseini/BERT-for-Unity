@@ -27,7 +27,7 @@ namespace HuggingFace {
     			return rest.post(payload, flask_route, queue);    			
     		} else if (task_name=="next_sentence"){
     			string[] input_sentence_iter = input_sentence.Split('#');
-	    		string payload = string.Format("{{'input_sentence':'{0}'}}", input_sentence);
+	    		string payload = string.Format("{{'input_sentence':'{0}', 'iter':'{1}'}}", input_sentence_iter[0], input_sentence_iter[1]);
 	    		string flask_route = string.Format("{0}/{1}", flask_url, task_name);
     			return rest.post(payload, flask_route, queue);
     		} else {
