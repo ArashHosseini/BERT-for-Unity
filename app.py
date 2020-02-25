@@ -1,8 +1,4 @@
 
-"""
-docu
-"""
-#import flask BSHP classifier application
 from api.bert_huggingface_app import app as flask_app
 #import production server
 from waitress import serve
