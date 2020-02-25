@@ -139,7 +139,8 @@ def sentiment_analysis():
 		query_parameters = to_dict(request)
 		sentence = query_parameters["input_sentence"]
 		sentiment_analysis = nlp_sentiment_analysis(sentence)
-		response = jsonify(sentiment_analysis[0])
+		print (sentiment_analysis[0], str(sentiment_analysis[0]["score"]), type(sentiment_analysis[0]))
+		response = jsonify({"score":str(sentiment_analysis[0]["score"]), "label":str(sentiment_analysis[0]["label"])})
 		return response
 
 @app.route("/question_answering", methods=['POST', 'GET','OPTIONS'])
@@ -147,8 +148,13 @@ def sentiment_analysis():
 def question_answering():
 	if request.method == 'POST':
 		query_parameters = to_dict(request)
-		answer = nlp_q_a(query_parameters)
-		response = jsonify(answer[0])
+		print (20*">", query_parameters)
+		answer_payload = nlp_q_a(query_parameters)
+		response = jsonify({"start":str(answer_payload[0]["start"]),
+			"end":str(answer_payload[0]["end"]),
+			"score":str(answer_payload[0]["score"]),
+			"answer":str(answer_payload[0]["answer"])
+			})
 		return response
 
 @app.route("/next_sentence", methods=['POST', 'GET','OPTIONS'])

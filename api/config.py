@@ -19,17 +19,13 @@ from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import torch
 
 #feature
-nlp_sentiment_analysis = pipeline('sentiment-analysis',
-								  model='distilbert-base-uncased-finetuned-sst-2-english',
-								  tokenizer='distilbert-base-uncased')
+nlp_sentiment_analysis = pipeline('sentiment-analysis',model='distilbert-base-uncased-finetuned-sst-2-english',tokenizer='distilbert-base-uncased')
 # q & a
-nlp_q_a = pipeline('question-answering',
-					model='distilbert-base-cased-distilled-squad',
-					tokenizer='distilbert-base-cased', device=0)
+nlp_q_a = pipeline('question-answering',model='distilbert-base-cased-distilled-squad',tokenizer='distilbert-base-cased', device=0)
+nlp_q_a.tokenizer.pad_token = '<PAD>'
+nlp_q_a.model.resize_token_embeddings(len(nlp_q_a.tokenizer))
 #analysis
-nlp_feature_extraction = pipeline('feature-extraction',
-								  model='distilbert-base-cased',
-								  tokenizer='distilbert-base-cased', device=0)
+nlp_feature_extraction = pipeline('feature-extraction',model='distilbert-base-cased',tokenizer='distilbert-base-cased', device=0)
 #next sentence
 gpt_tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 gpt_model = GPT2LMHeadModel.from_pretrained('gpt2')
