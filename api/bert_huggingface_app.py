@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-from transformers import pipeline
 from flask import Flask, request, jsonify, send_file, current_app, make_response, redirect, url_for
 from flask import render_template, send_from_directory
 from flask_cors import CORS
@@ -9,14 +8,12 @@ import requests
 import logging
 import ast
 from . import utilities
-from .config import API_TITLE
+from .config import API_TITLE, nlp_sentiment_analysis, nlp_q_a, nlp_feature_extraction, gpt_tokenizer, gpt_model
 import time
 from datetime import datetime
 from datetime import timedelta
 from functools import update_wrapper
 import torch
-from transformers import GPT2Tokenizer, GPT2LMHeadModel
-import torch.nn.functional as F
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 # creates a Flask application, named app
@@ -33,25 +30,6 @@ app.config.update(
 	APPNAME=API_TITLE,
 )
 logging.info("CORS support")
-
-#feature
-nlp_sentiment_analysis = pipeline('sentiment-analysis',
-								  model='distilbert-base-uncased-finetuned-sst-2-english',
-								  tokenizer='distilbert-base-uncased')
-# q & a
-nlp_q_a = pipeline('question-answering',
-					model='distilbert-base-cased-distilled-squad',
-					tokenizer='distilbert-base-cased', device=0)
-#analysis
-nlp_feature_extraction = pipeline('feature-extraction',
-								  model='distilbert-base-cased',
-								  tokenizer='distilbert-base-cased', device=0)
-#next sentence
-gpt_tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
-gpt_model = GPT2LMHeadModel.from_pretrained('gpt2')
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-gpt_model.to(device)
-gpt_model.eval()
 
 def crossdomain(origin=None, methods=None, headers=None,
 				max_age=21600, attach_to_all=True,
@@ -102,30 +80,27 @@ def to_dict(request):
 
 def generate_sentence(input):
 	sentence = input
-	context_tokens = tokenizer.encode(sentence, add_special_tokens=False)
+	context_tokens = gpt_tokenizer.encode(sentence, add_special_tokens=False)
 	context = torch.tensor(context_tokens, dtype=torch.long)
 	context = context.to(device)
 	num_samples = 1
 	context = context.unsqueeze(0).repeat(num_samples, 1)
 	generated = context
-
-	length = random.randint(10,30)
-
+	length = random.randint(10,20)
 	temperature = random.uniform(0.7,0.9)
-	print("length: ", length, " temperature: ", temperature)
 	with torch.no_grad():
 		for jj in range(2):
 			for _ in range(length):
-				outputs = model(generated)
+				outputs = gpt_model(generated)
 				next_token_logits = outputs[0][:, -1, :] / (temperature if temperature > 0 else 1.)
-				next_token = torch.multinomial(F.softmax(next_token_logits, dim=-1), num_samples=1)
+				next_token = torch.multinomial(torch.nn.functional.softmax(next_token_logits, dim=-1), num_samples=1)
 				generated = torch.cat((generated, next_token), dim=1)
 
 	out = generated
 	out = out[:, len(context_tokens):].tolist()
 
 	for o in out:
-		_text = tokenizer.decode(o, clean_up_tokenization_spaces=True)
+		_text = gpt_tokenizer.decode(o, clean_up_tokenization_spaces=True)
 		try:
 			index = _text.index(".")
 			text = _text[:index]
