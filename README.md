@@ -1,8 +1,6 @@
 # BERT-for-Unity (WIP)
 Bidirectional Encoder Representations from Transformers technique for Unity game engine using [huggingface implementation](https://github.com/huggingface/transformers). This server-based architecture is a interfaces for huggingface transformers "Pipeline" objects. Pipeline are high-level objects which automatically handle tokenization, running your data through a transformers model and outputting the result in a structured object.
 
-high-level objects which automatically handle tokenization, running your data through a transformers model and outputting the result in a structured object.
-
 # Install 
 
 This repo is tested on Python 3.5+, PyTorch 1.0.0+
@@ -28,7 +26,7 @@ cd BERT-for-Unity/
 python3 app.py
 ```
 
-## inside Unity
+## Unity
 
 ### Supported pipeline objects 
 
@@ -57,9 +55,9 @@ StartCoroutine(transformers.task("feature_extraction","i love you",flask_url,fea
 for more details see `unity/Assets/Simple_BERT_Usage.cs`. Open `unity/Assets/bert_example_scene.unity` to use the example scene. 
 
 
-## Example BERT webgl game
+# Example BERT webgl game
 
 
 
-## Current status, February 25th:
+# Current status, February 25th:
 this is the first protype so there are no tests available.
