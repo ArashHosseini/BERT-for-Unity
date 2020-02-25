@@ -1,5 +1,7 @@
 # BERT-for-Unity (WIP)
-Bidirectional Encoder Representations from Transformers technique for Unity game engine using [huggingface implementation](https://github.com/huggingface/transformers). This server-based work is largely based on huggingface "Pipeline" objects which are high-level objects which automatically handle tokenization, running your data through a transformers model and outputting the result in a structured object.
+Bidirectional Encoder Representations from Transformers technique for Unity game engine using [huggingface implementation](https://github.com/huggingface/transformers). This server-based architecture is a interfaces for huggingface transformers "Pipeline" objects. Pipeline are high-level objects which automatically handle tokenization, running your data through a transformers model and outputting the result in a structured object.
+
+high-level objects which automatically handle tokenization, running your data through a transformers model and outputting the result in a structured object.
 
 # Install 
 
@@ -26,16 +28,16 @@ cd BERT-for-Unity/
 python3 app.py
 ```
 
-## Unity
+## inside Unity
 
 ### Supported pipeline objects 
 
 
-1. `next-sentence` - Provide the next N sentences for the input sequence, it will consider the return as the new input during iteration.
-2. `fill-mask` - Takes an input sequence containing a masked token (e.g. <mask>) and return list of most probable filled sequences, with their probabilities.
-3. `question-answering` - Provided some context and a question refering to the context, it will extract the answer to the question in the context.
-4. `sentiment-analysis` - Gives the polarity (positive / negative) of the whole input sequence.
-5. `feature-extraction` - Generates a tensor representation for the input sequence
+ - `next-sentence` : Provide the next N sentences for the input sequence, it will consider the return as the new input during iteration.
+ - `fill-mask` : Takes an input sequence containing a masked token (e.g. <mask>) and return list of most probable filled sequences, with their probabilities.
+ - `question-answering` : Provided some context and a question refering to the context, it will extract the answer to the question in the context.
+ - `sentiment-analysis` : Gives the polarity (positive / negative) of the whole input sequence.
+ - `feature-extraction` : Generates a tensor representation for the input sequence
 
 
 ```c#
