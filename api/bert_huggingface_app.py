@@ -2,18 +2,23 @@
 import os
 import sys
 from flask import Flask, request, jsonify, send_file, current_app, make_response, redirect, url_for
-from flask import render_template, send_from_directory
 from flask_cors import CORS
-import requests
+from . import utilities
+from .config import API_TITLE,\
+nlp_sentiment_analysis,\
+nlp_q_a,\
+nlp_feature_extraction,\
+gpt_tokenizer,\
+gpt_model,\
+device,\
+nlp_fill_mask
 import logging
 import ast
-from . import utilities
-from .config import API_TITLE, nlp_sentiment_analysis, nlp_q_a, nlp_feature_extraction, gpt_tokenizer, gpt_model
 import time
-from datetime import datetime
 from datetime import timedelta
 from functools import update_wrapper
 import torch
+import random
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 # creates a Flask application, named app
@@ -114,7 +119,6 @@ def generate_sentence(input):
 			txt = sentence + text.replace("\n", "") + "."
 			return txt
 
-#predict image before the active first request to warm up the networks
 @app.before_first_request
 def warm_up_networks():
 	print ("warmup")
@@ -139,8 +143,8 @@ def sentiment_analysis():
 		query_parameters = to_dict(request)
 		sentence = query_parameters["input_sentence"]
 		sentiment_analysis = nlp_sentiment_analysis(sentence)
-		print (sentiment_analysis[0], str(sentiment_analysis[0]["score"]), type(sentiment_analysis[0]))
 		response = jsonify({"score":str(sentiment_analysis[0]["score"]), "label":str(sentiment_analysis[0]["label"])})
+		logging.info(response)
 		return response
 
 @app.route("/question_answering", methods=['POST', 'GET','OPTIONS'])
@@ -148,13 +152,9 @@ def sentiment_analysis():
 def question_answering():
 	if request.method == 'POST':
 		query_parameters = to_dict(request)
-		print (20*">", query_parameters)
 		answer_payload = nlp_q_a(query_parameters)
-		response = jsonify({"start":str(answer_payload[0]["start"]),
-			"end":str(answer_payload[0]["end"]),
-			"score":str(answer_payload[0]["score"]),
-			"answer":str(answer_payload[0]["answer"])
-			})
+		response = jsonify(answer_payload)
+		logging.info(response)
 		return response
 
 @app.route("/next_sentence", methods=['POST', 'GET','OPTIONS'])
@@ -165,6 +165,19 @@ def next_sentence():
 		input_sentence = query_parameters["input_sentence"]
 		iter_range = query_parameters["iter"]
 		for _ in range(int(iter_range)):
-			input_sentence = generate_sentence(input_sentence)
+			input_sentence = generate_sentence(str(input_sentence))
 		response = jsonify({"next_sentence":input_sentence})
+		logging.info(response)
+		return response
+
+
+@app.route("/fill_mask", methods=['POST', 'GET','OPTIONS'])
+@crossdomain(origin='*', headers=['access-control-allow-origin','Content-Type'])
+def fill_mask():
+	if request.method == 'POST':
+		query_parameters = to_dict(request)
+		input_sentence = query_parameters["input_sentence"]
+		answer_payload = nlp_fill_mask(str(input_sentence))
+		response = jsonify(answer_payload[0])
+		logging.info(response)
 		return response 

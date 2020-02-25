@@ -30,3 +30,5 @@ gpt_model = GPT2LMHeadModel.from_pretrained('gpt2')
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 gpt_model.to(device)
 gpt_model.eval()
+#fill mask
+nlp_fill_mask = pipeline("fill-mask", model='distilroberta-base', tokenizer = ("distilroberta-base", {"use_fast": False}), device=0)
