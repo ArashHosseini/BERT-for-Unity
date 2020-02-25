@@ -42,5 +42,10 @@ StartCoroutine(transformers.task("next_sentence",
 ```
 more details in `unity/Assets/HUGGINGFACE_BERT.cs`
 
+
+# Example Webgl game
+
+
+
 # Current status, February 25th:
 this is the first protype so there are no tests available.
