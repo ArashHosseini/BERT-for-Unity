@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-from flask import Flask, request, jsonify, send_file, current_app, make_response, redirect, url_for
+from flask import Flask, request, jsonify, send_file, current_app, make_response, redirect, url_for, render_template
 from flask_cors import CORS
 from . import utilities
 from .config import API_TITLE,\
@@ -121,7 +121,17 @@ def generate_sentence(input):
 
 @app.before_first_request
 def warm_up_networks():
-	print ("warmup")
+	#fix me
+	pass 
+
+@app.route('/unity_front')
+def unity_front():
+    return render_template('index_unity.html'), 200
+
+# application home
+@app.route("/")
+def index():
+    return redirect(url_for('unity_front'))
 
 @app.route("/feature_extraction", methods=['POST', 'GET','OPTIONS'])
 @crossdomain(origin='*', headers=['access-control-allow-origin','Content-Type'])

@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | Dynalips v12</title>
+    <title>Unity WebGL Player | BERT for Unity</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='TemplateData/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='TemplateData/style.css') }}">
     <script src="{{ url_for('static', filename='TemplateData/UnityProgress.js') }}"></script>  
     <script src="{{ url_for('static', filename='Build/UnityLoader.js') }}"></script>
     <script>
-      var gameInstance = UnityLoader.instantiate("gameContainer", "{{ url_for('static', filename='Build/dynalips_v12.json') }}", {onProgress: UnityProgress});
+      var gameInstance = UnityLoader.instantiate("gameContainer", "{{ url_for('static', filename='Build/v1.json') }}", {onProgress: UnityProgress});
     </script>
   </head>
   <body>
@@ -18,7 +18,7 @@
       <div class="footer">
         <div class="webgl-logo"></div>
         <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
-        <div class="title">Dynalips v12</div>
+        <div class="title">BERT for Unity</div>
       </div>
     </div>
   </body>
