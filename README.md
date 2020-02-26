@@ -56,9 +56,13 @@ StartCoroutine(transformers.task("feature_extraction","i love you",flask_url,fea
 for more details see `unity/Assets/Simple_BERT_Usage.cs`. Open `unity/Assets/bert_example_scene.unity` to use the example scene. 
 
 
-### Example BERT webgl app
+### Example BERT webgl app WIP
 
-
+```bash
+cd BERT-for-Unity/
+python3 app.py
+```
+and visit `http://localhost:5000`
 
 ### Current status, February 25th:
 this is the first protype so there are no tests available.
