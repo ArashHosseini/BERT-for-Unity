@@ -1,6 +1,6 @@
 # BERT-for-Unity
 
-Bidirectional Encoder Representations from Transformers technique for Unity game engine using [huggingface implementation](https://github.com/huggingface/transformers). This server-based architecture is a interfaces for huggingface transformers "Pipeline" objects. Pipeline are high-level objects which automatically handle tokenization, running your data through a transformers model and outputting the result in a structured object.
+Bidirectional Encoder Representations from Transformers technique for Unity game engine using [huggingface implementation](https://github.com/huggingface/transformers). This is a server-based interfaces for huggingface transformers "Pipeline" objects. Pipeline are high-level objects which automatically handle tokenization, running your data through a transformers model and outputting the result in a structured object.
 
 # Install 
 
