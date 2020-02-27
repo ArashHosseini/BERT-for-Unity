@@ -1,7 +1,7 @@
 # BERT-for-Unity
 
 <p align="center">
-    <img src="/src/usage.gif", width="360">
+    <img src="/src/usage.gif">
 </p>
 
 
@@ -63,8 +63,8 @@ for more details see `unity/Assets/Simple_BERT_Usage.cs`. Open `unity/Assets/ber
 
 ### Example BERT webgl app WIP
 
-<p align="center">
-    <img src="/src/webgl.gif", width="360">
+<p align="left">
+    <img src="/src/webgl.gif">
 </p>
 
 ```bash
