@@ -1,5 +1,10 @@
 # BERT-for-Unity
 
+<p align="center">
+    <img src="/src/usage.gif", width="360">
+</p>
+
+
 Bidirectional Encoder Representations from Transformers technique for Unity game engine using [huggingface implementation](https://github.com/huggingface/transformers). This is a server-based interfaces for huggingface transformers "Pipeline" objects. Pipeline are high-level objects which automatically handle tokenization, running your data through a transformers model and outputting the result in a structured object.
 
 # Install 
@@ -58,9 +63,13 @@ for more details see `unity/Assets/Simple_BERT_Usage.cs`. Open `unity/Assets/ber
 
 ### Example BERT webgl app WIP
 
+<p align="center">
+    <img src="/src/webgl.gif", width="360">
+</p>
+
 ```bash
 cd BERT-for-Unity/
-python3 app.py
+python3 app.py -webgl true
 ```
 and visit `http://localhost:5000`
 
