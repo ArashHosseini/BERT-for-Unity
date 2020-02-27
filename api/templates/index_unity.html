@@ -9,7 +9,7 @@
     <script src="{{ url_for('static', filename='TemplateData/UnityProgress.js') }}"></script>  
     <script src="{{ url_for('static', filename='Build/UnityLoader.js') }}"></script>
     <script>
-      var gameInstance = UnityLoader.instantiate("gameContainer", "{{ url_for('static', filename='Build/v1.json') }}", {onProgress: UnityProgress});
+      var gameInstance = UnityLoader.instantiate("gameContainer", "{{ url_for('static', filename='Build/v2.json') }}", {onProgress: UnityProgress});
     </script>
   </head>
   <body>
