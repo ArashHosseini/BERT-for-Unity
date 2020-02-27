@@ -11,25 +11,14 @@ import time
 from datetime import timedelta
 from functools import update_wrapper
 import random
-from transformers import pipeline
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import torch
 
-#feature
-nlp_sentiment_analysis = pipeline('sentiment-analysis',model='distilbert-base-uncased-finetuned-sst-2-english',tokenizer='distilbert-base-uncased')
-# q & a
-nlp_q_a = pipeline('question-answering',model='distilbert-base-cased-distilled-squad',tokenizer=('distilbert-base-cased', {"use_fast": False}), device=0)
-#analysis
-nlp_feature_extraction = pipeline('feature-extraction',model='distilbert-base-cased',tokenizer='distilbert-base-cased', device=0)
-#next sentence
 gpt_tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 gpt_model = GPT2LMHeadModel.from_pretrained('gpt2')
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 gpt_model.to(device)
 gpt_model.eval()
-#fill mask
-nlp_fill_mask = pipeline("fill-mask", model='distilroberta-base', tokenizer = ("distilroberta-base", {"use_fast": False}), device=0)
-
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 # creates a Flask application, named app
@@ -144,40 +133,6 @@ def unity_front():
 def index():
     return redirect(url_for('unity_front'))
 
-@app.route("/feature_extraction", methods=['POST', 'GET','OPTIONS'])
-@crossdomain(origin='*', headers=['access-control-allow-origin','Content-Type'])
-def feature_extraction():
-	if request.method == 'POST':
-		query_parameters = to_dict(request)
-		sentence = query_parameters["input_sentence"]
-		tensor = nlp_feature_extraction(sentence)
-		response = jsonify({"t0":",".join(str(i) for i in tensor[0][0]),
-							"t1":",".join(str(i) for i in tensor[0][1]),
-							"t2":",".join(str(i) for i in tensor[0][2])})
-		logging.info(response)
-		return response
-
-@app.route("/sentiment_analysis", methods=['POST', 'GET','OPTIONS'])
-@crossdomain(origin='*', headers=['access-control-allow-origin','Content-Type'])
-def sentiment_analysis():
-	if request.method == 'POST':
-		query_parameters = to_dict(request)
-		sentence = query_parameters["input_sentence"]
-		sentiment_analysis = nlp_sentiment_analysis(sentence)
-		response = jsonify({"score":str(sentiment_analysis[0]["score"]), "label":str(sentiment_analysis[0]["label"])})
-		logging.info(response)
-		return response
-
-@app.route("/question_answering", methods=['POST', 'GET','OPTIONS'])
-@crossdomain(origin='*', headers=['access-control-allow-origin','Content-Type'])
-def question_answering():
-	if request.method == 'POST':
-		query_parameters = to_dict(request)
-		answer_payload = nlp_q_a(query_parameters)
-		response = jsonify(answer_payload)
-		logging.info(response)
-		return response
-
 @app.route("/next_sentence", methods=['POST', 'GET','OPTIONS'])
 @crossdomain(origin='*', headers=['access-control-allow-origin','Content-Type'])
 def next_sentence():
@@ -190,15 +145,3 @@ def next_sentence():
 		response = jsonify({"next_sentence":input_sentence})
 		logging.info(response)
 		return response
-
-
-@app.route("/fill_mask", methods=['POST', 'GET','OPTIONS'])
-@crossdomain(origin='*', headers=['access-control-allow-origin','Content-Type'])
-def fill_mask():
-	if request.method == 'POST':
-		query_parameters = to_dict(request)
-		input_sentence = query_parameters["input_sentence"]
-		answer_payload = nlp_fill_mask(str(input_sentence))
-		response = jsonify(answer_payload[0])
-		logging.info(response)
-		return response 
